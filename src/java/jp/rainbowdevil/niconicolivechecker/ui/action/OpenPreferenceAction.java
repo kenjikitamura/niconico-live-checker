@@ -5,8 +5,8 @@ import java.io.IOException;
 import jp.rainbowdevil.niconicolivechecker.NiconicoLiveChecker;
 import jp.rainbowdevil.niconicolivechecker.config.Config;
 import jp.rainbowdevil.niconicolivechecker.ui.NiconicoWindow;
-import jp.rainbowdevil.niconicolivechecker.ui.preference.ExperimentalPreferencePage;
-import jp.rainbowdevil.niconicolivechecker.ui.preference.GeneralPreferencePage;
+//import jp.rainbowdevil.niconicolivechecker.ui.preference.ExperimentalPreferencePage;
+//import jp.rainbowdevil.niconicolivechecker.ui.preference.GeneralPreferencePage;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -32,13 +32,13 @@ public class OpenPreferenceAction extends Action {
 	public void run() {
 		PreferenceManager pm = new PreferenceManager();
 
-        PreferenceNode pnode1 = new PreferenceNode("NODE1");
-        pnode1.setPage(new GeneralPreferencePage());
-        pm.addToRoot(pnode1);
-        
-        PreferenceNode pnode2 = new PreferenceNode("NODE2");
-        pnode2.setPage(new ExperimentalPreferencePage());
-        pm.addToRoot(pnode2);
+//        PreferenceNode pnode1 = new PreferenceNode("NODE1");
+//        pnode1.setPage(new GeneralPreferencePage());
+//        pm.addToRoot(pnode1);
+//        
+//        PreferenceNode pnode2 = new PreferenceNode("NODE2");
+//        pnode2.setPage(new ExperimentalPreferencePage());
+//        pm.addToRoot(pnode2);
         
 
 //        PreferenceNode pnode2 = new PreferenceNode("NODE2");

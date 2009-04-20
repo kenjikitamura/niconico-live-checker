@@ -23,18 +23,29 @@ import jp.rainbowdevil.niconicolivechecker.data.FavoriteChannel;
 import jp.rainbowdevil.niconicolivechecker.data.LiveChannel;
 import jp.rainbowdevil.niconicolivechecker.ui.NiconicoWindow;
 
+/**
+ * NiconicoLiveCheckerのメインクラス
+ * @author KENJI
+ *
+ */
 public class NiconicoLiveChecker {
 	
+	/** アプリ名 */
 	public static final String APP_NAME = "Niconico Live Checker";
 	
+	/** 現在放送中のチャンネルリスト */
 	private List<LiveChannel> currentLiveChannelList;
+	
+	/** お気に入りのリスト */
 	private List<FavoriteChannel> favoriteChannelList;
 	private ScheduledExecutorService executor = Executors.newScheduledThreadPool(3,new DaemonThreadFactory());
+	
+	/** UI Window */
 	private NiconicoWindow window;
 	
+	/** 設定オブジェクト */
 	private Config config;
 	
-
 	/** デフォルト生放送チャンネルリスト更新間隔(分) */
 	private int checkInterval = 3 ;
 	
@@ -42,8 +53,11 @@ public class NiconicoLiveChecker {
 	private static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory
 			.getLog(NiconicoLiveChecker.class);
 	
+	/**
+	 * Main
+	 * @param args
+	 */
 	public static void main( String[] args ){
-		
 		(new DOMConfigurator()).doConfigure(NiconicoLiveChecker.class.getResourceAsStream( "/log4j.xml" ), LogManager.getLoggerRepository());
 		
 		NiconicoLiveChecker main = new NiconicoLiveChecker();
@@ -52,12 +66,10 @@ public class NiconicoLiveChecker {
 	
 	public void start(){
 		readFavoriteFile();
-		
 
 		config = Config.get();
 		config.load();
 
-		
 		window = new NiconicoWindow(this);
 		window.setBlockOnOpen(true);
 		window.open();
@@ -74,6 +86,9 @@ public class NiconicoLiveChecker {
 	
 	
 	private boolean isTimerStart;
+	/**
+	 * 一定間隔で放送中リストを取得するためのタイマ
+	 * 	 */
 	public void startTimer(){
 		if( !isTimerStart ){
 			log.debug("startTimer");
@@ -90,7 +105,9 @@ public class NiconicoLiveChecker {
 	}
 	
 	
-	
+	/**
+	 * お気に入りリストの保存
+	 */
 	public void writeFavoriteFile(){
 		DataManager dataManager = new DataManager();
 		// 最後にお気に入り保存
@@ -101,6 +118,9 @@ public class NiconicoLiveChecker {
 		}
 	}
 	
+	/**
+	 * お気に入りリストの読み込み
+	 */
 	private void readFavoriteFile(){
 		DataManager dataManager = new DataManager();
 		currentLiveChannelList = new ArrayList<LiveChannel>();
