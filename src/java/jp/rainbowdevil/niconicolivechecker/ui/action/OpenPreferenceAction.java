@@ -22,6 +22,11 @@ import org.eclipse.jface.preference.PreferenceStore;
 public class OpenPreferenceAction extends Action {
 	
 	private NiconicoWindow checker;
+	
+	/** Logインスタンスを取得 */
+	private static org.apache.commons.logging.Log log = org.apache.commons.logging.LogFactory
+			.getLog(OpenPreferenceAction.class);
+	
 	public OpenPreferenceAction( NiconicoWindow checker ){
 		super("設定");
 		this.checker = checker;
@@ -52,11 +57,9 @@ public class OpenPreferenceAction extends Action {
         PreferenceStore store = (PreferenceStore) dialog.getPreferenceStore();
         
         try {
-        	store.setValue("test", "aoueあいうえお");
 			store.save();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("設定ファイルの保存に失敗しました。",e);
 		}
         
 

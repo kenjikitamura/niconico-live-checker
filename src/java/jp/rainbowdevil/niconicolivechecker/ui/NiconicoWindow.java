@@ -87,6 +87,10 @@ public class NiconicoWindow extends ApplicationWindow{
 		notifiedUrlSet = new HashMap<String,String>();
 	}
 	
+	
+	/**
+	 * メニューの作成
+	 */
 	@Override
 	protected MenuManager createMenuManager() {
 		MenuManager menuManager = new MenuManager("");
@@ -115,7 +119,7 @@ public class NiconicoWindow extends ApplicationWindow{
 					log.debug("お気に入り="+input);
 					if( input.trim().length() != 0 ){
 						FavoriteChannel favoriteChannel = new FavoriteChannel();
-						favoriteChannel.setTitle(input.trim());
+						favoriteChannel.setKeyword(input.trim());
 						checker.getFavoriteChannelList().add(favoriteChannel);
 						favoriteComposite.refresh();
 						checker.writeFavoriteFile();
@@ -201,15 +205,16 @@ public class NiconicoWindow extends ApplicationWindow{
 	 */
 	private void checkFavorite( ){
 		
+		// お気に入りが含まれていたかどうかのフラグ
 		boolean hit = false;
 		
 		for (LiveChannel channel  : checker.getCurrentLiveChannelList()) {
 			for( FavoriteChannel favorite : checker.getFavoriteChannelList() ){
-				if( favorite.getTitle().length() == 0 ){
+				if( favorite.getKeyword().length() == 0 ){
 					continue;
 				}
-				if( channel.getTitle().indexOf(favorite.getTitle()) != -1  ||
-					 channel.getCommunityTitle().indexOf(favorite.getTitle()) != -1 ){
+				if( channel.getTitle().indexOf(favorite.getKeyword()) != -1  ||
+					 channel.getCommunityTitle().indexOf(favorite.getKeyword()) != -1 ){
 
 					channel.setFavorite(true);
 					log.debug("setFavorite true "+channel.getTitle()+" "+channel.getCommunityTitle());

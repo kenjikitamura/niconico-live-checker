@@ -225,11 +225,11 @@ public class ChannelListComposite extends Composite {
 			@Override
 			public void run() {
 				FavoriteChannel favoriteChannel = new FavoriteChannel();
-				favoriteChannel.setTitle(channel.getCommunityTitle());
+				favoriteChannel.setKeyword(channel.getCommunityTitle());
 				
 				boolean exist = false;
 				for( FavoriteChannel favorite :checker.getFavoriteChannelList()){
-					if( channel.getTitle().equals(favorite.getTitle()) || channel.getCommunityTitle().equals(favorite.getTitle())){
+					if( channel.getTitle().equals(favorite.getKeyword()) || channel.getCommunityTitle().equals(favorite.getKeyword())){
 						exist = true;
 					}
 				}
