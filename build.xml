@@ -1,0 +1,104 @@
+<!-- 
+   NiconicoLiveChecker
+-->
+<project name="NiconicoLiveChecker" default="zip">
+
+	<property name="dist" value="dist" />
+
+	<property name="src" value="src/java"/>
+	<property name="classesDir" value="classes"/>
+	<property name="libDir" value="lib"/>
+	<property name="jarFile" value="niconicoLiveChecker.jar"/>
+	<property name="archive" value="archive"/>
+
+	<!-- ライブラリクラスパス -->
+	<path id="libraryclasspath">
+	    <fileset dir="${libDir}">
+	    	<include name="**/*.jar" />
+	    </fileset>
+	</path>
+
+
+	<!-- コンパイル結果をクリアする -->
+	<target name="clean" description="成果物の削除" >
+		<delete dir="${dist}"/>
+		<delete dir="${archive}"/>
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+          target: compile
+	          コンパイル
+         - - - - - - - - - - - - - - - - - -->
+	<target name="compile" depends="clean" description="コンパイルを行う">
+		<mkdir dir="${classesDir}"/>
+		<buildnumber/>
+		<javac destdir="${classesDir}" target="1.5" optimize="on" debug="on" classpathref="libraryclasspath" encoding="shift-jis">
+			<src>
+				<path path="src/java"/>
+			</src>
+			<sourcepath>
+			</sourcepath>
+		</javac>
+		<copy file="src/java/jp/rainbowdevil/niconicolivechecker/icon.png" todir="${classesDir}/jp/rainbowdevil/niconicolivechecker/"/>
+		<copy file="src/java/log4j.xml" todir="${classesDir}/"/>
+		<copy file="src/java/start.wav" todir="${classesDir}/"/>
+		
+	</target>
+
+	<!-- - - - - - - - - - - - - - - - - -
+          t	arget: jar
+	          コンパイル後にJarに固める
+         - - - - - - - - - - - - - - - - - -->
+  <target name="archive" depends="compile" description="Jarに固める">
+      <jar destfile="${jarFile}" basedir="${classesDir}"  manifest="MANIFEST.MF">
+      	<include name="**/*.class"/>
+      	<include name="**/*.xml"/>
+      	<include name="**/*.wav"/>
+      	<include name="**/*.gif"/>
+      	<include name="**/*.png"/>
+      </jar>
+  </target>
+
+
+	<!-- コントローラを配置する -->
+	<target name="dist" depends="exewrap">
+		<!--<copy file="CapturedEventData.xml" todir="${dist}"/>
+		<copy file="dialogSample.xml" todir="${dist}"/>-->
+	</target>
+
+	<!-- Jarをexewrapで実行ファイルにラップする -->
+	<target name="exewrap" depends="archive" >
+		<mkdir dir="${dist}"/>
+		<exec executable="resource/exewrap095/exewrap.exe" >
+			<arg value="-g"/>
+			<arg value="-a"/>
+			<arg value="-Xmx128M"/>
+			<arg value="-a"/>
+			<arg value="-verbosegc"/>
+			<arg value="-i"/>
+			<arg value="dat/favicon.ico"/>
+			<arg value="-o"/>
+			<arg value="${dist}/NiconicoLiveChecker.exe"/>
+			<arg value="${jarFile}"/>
+		</exec>
+		<copy todir="${dist}/lib">
+			<fileset dir="${libDir}">
+			</fileset>
+		</copy>
+		
+		<mkdir dir="${dist}/lib/main"/>
+		<copy file="${jarFile}" todir="${dist}/lib/main"/>
+		<!--<copy file="src/java/niconicoLiveChecker.properties" todir="${dist}/"/>-->
+		<copy file="resource/niconicoLiveChecker.sh" todir="${dist}"/>
+		<copy file="resource/niconicoLiveChecker_mac.sh" todir="${dist}"/>
+		<copy file="resource/niconicoLiveChecker_mac64.sh" todir="${dist}"/>
+	</target>
+
+	<target name="zip" depends="dist">
+		<mkdir dir="${archive}"/>
+		<zip destfile="${archive}/NiconicoLiveChecker.zip" basedir="${dist}" update="true" excludes="">
+		</zip>	
+	</target>
+	
+
+</project>

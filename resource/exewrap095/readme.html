@@ -1,0 +1,430 @@
+<html>
+
+<head>
+	<meta HTTP-EQUIV="content-type" CONTENT="text/html; charset=Shift_JIS">
+	<title>exewrap</title>
+	<style type="text/css">
+	<!--
+	div {
+		margin-left:		2em;
+		margin-right:		2em;
+	}
+	h3 {
+		font-size:			small;
+		font-weight:		normal;
+		line-height:		1.5;
+		margin-left:		0em;
+		padding-left:		0.5em;
+		color:				midnightblue;
+		background:			lightsteelblue;
+		border-left:		solid 0.7em;
+		border-bottom:		solid 0.05em;
+	}
+	h4 {
+		font-size:			small;
+		font-weight:		normal;
+		line-height:		1.3;
+		padding-left:		0.5em;
+		color:				darkslategray;
+		background:			lightgrey;
+		border-bottom:		solid 0.05em;
+	}
+	pre {
+		font-family:		monospace;
+		font-size:			small;
+		font-weight:		normal;
+		line-height:		1.5;
+		padding-left:		4em;
+		color:				green;
+	}
+	em {
+		color:				midnightblue;
+	}
+	//-->
+	</style>
+
+</head>
+
+<body>
+
+<tt>exewrap v0.9.2</tt>
+
+<h3>インストール</h3>
+<div>
+インストールは不要です。適当な場所に <tt>exewrap.exe</tt> をコピーしてお使いください。
+JDK のインストールディレクトリ <tt>bin</tt> にコピーしておくと <tt>javac.exe</tt> や <tt>jar.exe</tt> と一緒にパスが通せて便利です。
+</div>
+
+<h3>使ってみよう</h3>
+<div>
+JAR ファイルを <tt>exewrap.exe</tt> の引数に指定するだけで、簡単に EXE ファイルが作成できます。
+JDK に付属している有名なサンプルプログラム <tt>SwingSet2.jar</tt> を EXE ファイルに変換する場合は次のようにします。
+<pre>
+C:\>exewrap.exe SwingSet2.jar
+</pre>
+できあがった SwingSet2.exe をダブルクリックして実行すると、SwingSet2 が起動します。
+ただ、実行時にコンソールウィンドウが表示されてしまって邪魔です。
+オプション -g を指定すると、コンソールアプリケーションではなくウィンドウアプリケーションとして EXE ファイルが作成されます。
+<pre>
+C:\>exewrap.exe -g SwingSet2.jar
+</pre>
+これでコンソールウィンドウが表示されなくなりました。
+exewrap には、他にも便利なオプションが備わっています。詳細は<a href="#options">オプション一覧</a>を確認してください。
+</div>
+
+<h3>アプリケーションの種類と特徴</h3>
+<div>
+exewrap では、コンソールアプリケーション、ウィンドウアプリケーション、サービスアプリケーションが作成できます。
+それぞれのアプリケーションの特徴を紹介します。
+
+<h4>コンソールアプリケーション</h4>
+<div>
+コンソール(コマンドプロンプト)用のアプリケーションです。
+オプション -g および -s のいずれも指定しない場合、コンソールアプリケーションとなります。
+</div>
+
+<h4>ウィンドウアプリケーション</h4>
+<div>
+ウィンドウを持つアプリケーションです。
+オプション -g を指定すると、ウィンドウアプリケーションになります。
+ウィンドウアプリケーションには以下の特徴があります。
+<ul>
+	<li>標準出力/標準エラー出力がファイルに書き出されます。
+		System.out.println() や e.printStackTrace() などの出力を確認することができます。
+		拡張フラグ NOLOG を指定すると、このファイル出力機能は無効になります。
+		<br><br>
+	<li>キャッチされなかった例外をエラーダイアログで表示します。
+		最上位の main メソッドでもキャッチされずに、アプリケーション外まで伝播した例外をダイアログで表示します。
+		同時に例外のスタックトレースがファイルに出力されるので、アプリケーションの異常終了時の状態を把握しやすくなります。
+		<br><br>
+	<li>スレッドが異常終了した場合もエラーダイアログを表示してアプリケーション全体を終了させます。
+		スタックトレースのファイル出力が行われます。マルチスレッドアプリケーションで、一部のスレッドが
+		ダウンしたままアプリケーションが続行されてしまう危険性がなくなります。
+</ul>
+</div>
+
+<h4>サービスアプリケーション</h4>
+<div>
+常時動作させるためのサービス用アプリケーションです。
+オプション -s を指定すると、サービスアプリケーションになります。
+<br><br>サービスアプリケーションを作成する場合、メインクラスに次のふたつのメソッドを実装する必要があります。
+<pre>
+public static void start(String[] args)
+public static void stop()
+</pre>
+これらのメソッドは、Windows のサービスコントロールマネージャ(SCM)によって呼び出されます。
+start メソッドはサービスを開始したときに、stop メソッドはサービスを停止したときに呼び出されます。
+開発者は、stop() メソッドが呼び出されたあと、start メソッドが終了するようコードを書かなければなりません。
+たとえば、start メソッドを無限ループで設計してしまうのは問題です。実装例 ServiceSample.java を参考にしてください。
+<br><br>
+完成したサービスアプリケーションに引数 -install を指定して実行すると Windows サービスに登録されます。
+サンプルプログラム ServiceSample.jar をサービスに登録するには次のようにします。
+<pre>
+C:\>exewrap.exe -s ServiceSample.jar
+C:\>ServiceSample.exe -install
+</pre>
+サービス実行時の引数を指定する場合は、-install に続いて記述してください。
+サービス実行時の引数は、start メソッドの引数 String[] args として渡されます。
+<pre>
+C:\>ServiceSample.exe -install foo bar
+</pre>
+インストール時にサービスの構成を指定することもできます。サービス構成オプションは -install よりも前に記述します。
+たとえば、サービスの実行アカウントを指定する場合は次のように指定します。サービス構成オプションの詳細は
+<a href="#service-install-options">サービス構成オプション</a>を確認してください。
+
+<pre>
+C:\>ServiceSample.exe -u Administrator -p mypassword -install
+</pre>
+サービスをアンインストールする場合の例をあげます。
+サービスのアンインストールは、サービスを停止してから行ってください。
+また、イベントビューアが開いている状態では、正しくサービスをアンインストールすることができないので注意してください。
+<pre>
+C:\>ServiceSample.exe -remove
+</pre>
+サービスアプリケーションには以下の特徴があります。
+<ul>
+	<li>標準出力/標準エラー出力がイベントログに書き出されます。
+		標準出力は「情報」としてイベントログに、標準エラー出力は「警告」としてイベントログに出力されます。
+		出力はバッファリングされ、flush() したときにイベントログへの出力が行われます。
+		拡張フラグ NOLOG を指定すると、このイベントログ出力機能は無効になります。
+		
+		<br><br>
+	<li>キャッチされなかった例外をイベントログに出力します。
+		例外がキャッチされずにアプリケーション外まで伝播すると、
+		例外発生時のスタックトレースがイベントログに「エラー」として記録され、サービスが停止します。
+		<br><br>
+	<li>スレッドが異常終了した場合もイベントログに「エラー」としてスタックトレースを出力し、サービスが停止します。
+</ul>
+</div>
+
+</div>
+
+<h3>Pack200 アーカイブ形式対応</h3>
+<div>
+exewrapはJARファイル形式に特化し高い圧縮率を実現するPack200アーカイブ形式に対応しています。
+Pack200アーカイブ形式はJava実行環境5.0(1.5.0)以上で利用できます。
+exewrapの <tt>-t</tt> オプションで1.5以上を指定することで自動的にPack200アーカイブ形式が使用されます。
+(<tt>-t</tt> オプションを省略した場合もターゲットバージョン1.5として扱われるため、Pack200アーカイブ形式が使用されます。)
+Pack200アーカイブ形式を使用するとJARファイルのサイズを半分程度のサイズに圧縮することができます。
+</div>
+
+<h3>スプラッシュスクリーン対応</h3>
+<div>
+exewrapはJava6.0から導入されたスプラッシュスクリーンに対応しています。
+JARファイルがスプラッシュスクリーンを表示するように構成されていれば、exewrapでも自動的にスプラッシュスクリーンが有効になります。
+JARファイルでスプラッシュスクリーンを表示するように構成するには、マニフェストファイルで SplashScreen-Image オプションを使用してイメージのパスを指定する必要があります。
+<tt>SplashScreen-Image</tt> オプションの指定については
+<a href="http://java.sun.com/javase/ja/6/docs/ja/api/java/awt/SplashScreen.html">http://java.sun.com/javase/ja/6/docs/ja/api/java/awt/SplashScreen.html</a>
+をご確認ください。
+</div>
+
+<h3>外部ライブラリの読み込み</h3>
+<div>
+Java には自動的に外部ライブラリ(JAR)を読み込むための仕組み(Extension Framework)があります。
+既定では、JRE をインストールしたディレクトリの <tt>lib\ext</tt> が拡張ディレクトリとなります。
+拡張ディレクトリに配置された外部ライブラリ(JAR)は、クラスパスに明示的に指定することなく使用できます。
+<p>
+exewrap で作成されたアプリケーションは、アプリケーションファイル(EXE)のあるディレクトリに、
+<tt>lib</tt> ディレクトリが存在する場合、<tt>lib</tt> ディレクトリを自動的に拡張ディレクトリ(<tt>java.ext.dirs</tt>)に追加します。
+JDBC ドライバなどの外部ライブラリは、アプリケーションファイル(EXE)と同じところに
+<tt>lib</tt> ディレクトリを作成し、そのディレクトリ内に配置することができます。
+<p>
+<tt>lib</tt> ディレクトリには PATH も通されるため、DLL を配置することもできます。
+<p>
+<font color="gray" size="-1">※ <tt>lib</tt> ディレクトリ内のライブラリファイル(JAR)が既定の拡張ディレクトリにコピーされるわけではありません。</font><br>
+<font color="gray" size="-1">※ PATH が通るのは実行プロセスのみです。環境変数 PATH には影響を与えません。</font><br>
+</div>
+
+<h3>システムプロパティ</h3>
+<div>
+exewrap で作成したアプリケーションは実行時に、いくつかのシステムプロパティを自動的に設定します。
+<table align=center>
+	<col valign=top bgcolor=palegreen>
+	<col valign=top bgcolor=navajowhite>
+	
+	<tr><th width=200 bgcolor=darkseagreen>システムプロパティ</td><th bgcolor=burlywood>説明</td></tr>
+	<tr><td>　<tt>java.application.path</tt></td><td>アプリケーションファイルのパスを保持しています。</td></tr>
+	<tr><td>　<tt>java.application.name</tt></td><td>アプリケーションファイル名を保持しています。</td></tr>
+	<tr><td>　<tt>java.application.version</tt></td><td>アプリケーションのバージョンを保持しています。</td></tr>
+</table>
+<p>
+たとえば、アプリケーションの完全なパスを取得するために次のコードが使用できます。
+<pre>
+System.getProperty("java.application.path") + "\\"
+  + System.getProperty("java.application.name")
+</pre>
+</div>
+
+<h3>セキュリティマネージャ</h3>
+<div>
+exewrap で作成したアプリケーションは、簡単にセキュリティマネージャを有効にすることができるようになっています。
+アプリケーションと同じディレクトリにベースネームの同じポリシーファイルを配置することで、自動的にセキュリティマネージャが有効になります。
+<p>
+たとえば、作成したアプリケーションを <tt>MyApp.exe</tt> とした場合、同じディレクトリに
+<tt>MyApp.policy</tt> を配置することで、セキュリティマネージャが有効になります。これは VM引数
+<tt>-Djava.security.manager -Djava.security.policy=MyApp.policy</tt> が指定されたのと同じ意味を持ちます。
+
+</div>
+
+<h3>JRE 検索</h3>
+<div>
+exewrap で作成されたアプリケーションは、アプリケーションファイル(EXE)のあるディレクトリに、
+<tt>jre</tt> ディレクトリが存在する場合、<tt>jre</tt> ディレクトリを Java 実行環境として使用します。
+この方法を利用すると、システムに JRE がインストールされていない環境でも <tt>jre</tt> ディレクトリを
+単純にコピーするだけでアプリケーションを実行することできます。
+<p>
+<tt>jre</tt> ディレクトリが存在しない場合は、環境変数 JAVA_HOME を Java 実行環境として使用します。
+環境変数 JAVA_HOME も定義されていない場合は、レジストリを参照してシステムにインストールされている JRE を検索します。
+
+</div>
+
+<a name="options"></a>
+<h3>オプション一覧</h3>
+<div>
+exewrap のオプション一覧です。
+
+<p>
+<table align=center>
+	<col valign=top bgcolor=palegreen>
+	<col valign=top bgcolor=navajowhite>
+	
+<tr><th width=160 bgcolor=darkseagreen>オプション</td><th bgcolor=burlywood>説明</td></tr>
+
+<tr><td>　<tt>-g</tt></td><td>
+ウィンドウ(GUI)アプリケーションを作成します。
+</td></tr>
+
+<tr><td>　<tt>-s</tt></td><td>
+サービスアプリケーションを作成します。
+</td></tr>
+
+<tr><td>　<tt>-t</tt> <em>&lt;target-version&gt;</em></td><td>
+プログラムの実行に必要なJava実行環境のバージョンを指定します。
+値は内部バージョンで指定してください。つまり、Java 5.0、Java 6.0 はそれぞれ、1.5、1.6 と指定する必要があります。
+1.5以上を指定すると、Pack200アーカイブ形式が使用され出力ファイルサイズが小さくなります。
+</td></tr>
+
+<tr><td>　<tt>-e</tt> <em>&lt;ext-flags&gt;</em></td><td>
+拡張フラグを指定します。詳細は<a href="#ext-flags">拡張フラグ一覧</a>を確認してください。
+</td></tr>
+
+<tr><td>　<tt>-a</tt> <em>&lt;vm-args&gt;</em></td><td>
+アプリケーション実行時の VM 引数を指定します。
+</td></tr>
+
+<tr><td>　<tt>-i</tt> <em>&lt;icon-file&gt;</em></td><td>
+EXE ファイルに指定したアイコンを埋め込みます。
+</td></tr>
+
+<tr><td>　<tt>-v</tt> <em>&lt;version&gt;</em></td><td>
+EXE ファイルにバージョン情報を埋め込みます。
+バージョン指定の書式は、メジャーバージョン、マイナーバージョン、リビジョン、ビルドナンバーをピリオドで区切って指定します。
+リビジョンやビルドナンバーを省略することもできます。
+ビルドナンバーを省略して EXE ファイルを既存のファイルに上書き作成した場合、自動的にビルドナンバーが +1 されます。
+</td></tr>
+
+<tr><td>　<tt>-d</tt> <em>&lt;description&gt;</em></td><td>
+EXE ファイルに説明情報を埋め込みます。説明にはアプリケーション名やアプリケーションの機能を記述します。
+サービスアプリケーションの場合にはサービスの説明としてコントロールパネルのサービスにも表示されます。
+説明文に半角スペースを含める場合は、説明全体をダブルクォーテーションで囲む必要があります(コマンドプロンプトの場合)。
+ant から exewrap を呼び出す場合は、ダブルクォーテーションではなくシングルクォーテーションを使用します。
+</td></tr>
+
+<tr><td>　<tt>-c</tt> <em>&lt;copyright&gt;</em></td><td>
+EXE ファイルに著作権表示を埋め込みます。
+オプション -d と同様に、ダブルクォーテーションやシングルクォーテーションが必要になることがあります。
+</td></tr>
+
+<tr><td>　<tt>-j</tt> <em>&lt;jar-file&gt;</em></td><td>
+変換元となる実行可能 JAR ファイルを指定します。
+JAR ファイルはマニフェストファイルでメインクラスが指定された実行可能形式でなければなりません。
+オプション -j を省略した場合、最後の引数を JAR ファイルと見なします。
+</td></tr>
+
+<tr><td>　<tt>-o</tt> <em>&lt;exe-file&gt;</em></td><td>
+変換先となる EXE ファイルを指定します。ファイルがすでに存在している場合、上書きされます。
+オプション -o を省略した場合、変換元 JAR ファイルの拡張子を exe に置き換えた名前でファイルが作成されます。
+</td></tr>
+
+
+</table>
+
+</div>
+
+<a name="ext-flags"></a>
+<h3>拡張フラグ一覧</h3>
+<div>
+拡張フラグの一覧です。拡張フラグはアプリケーションに特別な機能を与えます。拡張フラグは <tt>-e</tt> オプションで指定します。複数の拡張フラグを指定する場合はセミコロン<b> ; </b>でフラグを区切ってください。
+たとえば、拡張フラグ <i>SINGLE</i> と <i>DDE_CONNECT</i> を指定する場合は以下のように指定します。
+<pre>
+C:\>exewrap.exe -g -e SINGLE;DDE_CONNECT test.jar
+</pre>
+
+<table align=center>
+	<col valign=top bgcolor=palegreen>
+	<col valign=top bgcolor=navajowhite>
+	
+<tr><th width=160 bgcolor=darkseagreen>拡張フラグ</td><th bgcolor=burlywood>説明</td></tr>
+
+<tr><td>　<tt>SINGLE</tt></td><td>
+アプリケーションの二重起動を禁止します。既にアプリケーションが起動している状態で、
+新たにアプリケーションを起動しようとした場合、新たに起動しようとしたアプリケーションは何もせずに終了します。
+</td></tr>
+
+<tr><td>　<tt>DDE_CONNECT</tt></td><td>
+アプリケーションの二重起動を禁止します。すでにアプリケーションが起動している状態で、
+新たにアプリケーションを起動しようとした場合、新たに起動しようとしたアプリケーションから既に起動しているアプリケーションへ
+通知がおこなわれ、既に起動しているアプリケーションの main メソッドが再度実行されます。
+main メソッドに渡される引数には、新たに起動しようとしたアプリケーションのコマンドライン引数が設定されます。
+新たに起動しようとしたアプリケーションは終了します。
+この機能を使用すると、二重起動を試みたときに起動済みのアプリケーションを最前面に表示したり、
+ひとつの Java VM を共有してアプリケーション画面を複数起動することができます。
+</td></tr>
+
+<tr><td>　<tt>NOLOG</tt></td><td>
+アプリケーションのログ出力機能を無効にします。
+ウィンドウアプリケーションでは、標準出力、標準エラー出力がログファイルに出力されなくなります。
+サービスアプリケーションでは、標準出力、標準エラー出力がイベントログに出力されなくなります。
+</td></tr>
+
+</table>
+
+</div>
+
+<a name="service-install-options"></a>
+<h3>サービス構成オプション</h3>
+<div>
+サービスアプリケーション <tt>-install</tt> オプション指定時に使用できるオプションの一覧です。
+これらのオプションは <tt>-install</tt> よりも前に指定する必要があります。
+<tt>-install</tt> よりも後に指定した引数は、サービスの実行時引数とサービスアプリケーションに渡されます。
+
+<p>
+<table align=center>
+	<col valign=top bgcolor=palegreen>
+	<col valign=top bgcolor=navajowhite>
+	
+<tr><th width=160 bgcolor=darkseagreen>インストール時</td><th bgcolor=burlywood>説明</td></tr>
+
+<tr><td>　<tt>-n</tt> <em>&lt;display-name&gt;</em></td><td>
+サービスの表示名を指定します。
+</td></tr>
+
+<tr><td>　<tt>-i</tt></td><td>
+デスクトップとの対話をサービスに許可します。
+</td></tr>
+
+<tr><td>　<tt>-m</tt></td><td>
+スタートアップの種類を「手動」にします。このオプションを指定しない場合、スタートアップの種類は「自動」になります。
+</td></tr>
+
+<tr><td>　<tt>-d</tt> <em>&lt;dependencies&gt;</em></td><td>
+サービスの依存関係を指定します。たとえばサービスアプリケーションがイベントログサービスを必要としている場合は、
+<tt>-d Eventlog</tt> としてイベントログサービスに依存させます。
+複数のサービスに依存する場合は、サービス名をセミコロン<b> ; </b>で区切ります。
+</td></tr>
+
+<tr><td>　<tt>-u</tt> <em>&lt;username&gt;</em></td><td>
+サービスアプリケーションの実行アカウントを指定します。通常のユーザーアカウントのほかにビルトインシステムアカウントとして、
+<tt>NT AUTHORITY\System</tt>、<tt>NT AUTHORITY\LocalService</tt>、<tt>NT AUTHORITY\NetworkService</tt>が指定できます。
+</td></tr>
+
+<tr><td>　<tt>-p</tt> <em>&lt;password&gt;</em></td><td>
+サービスアプリケーション実行アカウントのパスワードを指定します。
+ビルトインシステムアカウントを使用する場合は、パスワードを指定する必要はありません。
+</td></tr>
+
+<tr><td>　<tt>-s</tt></td><td>
+サービスをインストールした後に、ただちにサービスを開始します。
+</td></tr>
+
+</table>
+
+</div>
+
+<p>
+<div>
+サービスアプリケーション <tt>-remove</tt> オプション指定時に使用できるオプションの一覧です。
+これらのオプションは <tt>-remove</tt> よりも前に指定する必要があります。
+
+<p>
+<table align=center>
+	<col valign=top bgcolor=palegreen>
+	<col valign=top bgcolor=navajowhite>
+	
+<tr><th width=160 bgcolor=darkseagreen>アンインストール時</td><th bgcolor=burlywood>説明</td></tr>
+
+<tr><td>　<tt>-s</tt></td><td>
+サービスをアンインストールする前に、サービスを停止します。
+</td></tr>
+
+</table>
+
+</div>
+
+<br>
+<hr>
+<em>2008/05/25 HIRUKAWA Ryo</em>
+
+</body>
+
+</html>

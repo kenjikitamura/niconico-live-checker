@@ -1,0 +1,421 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="copyright" content="(C) niwango, inc. All rights reserved.">
+
+<!---->
+ 
+
+<!---->
+<title>放送中の番組 - ニコニコ生放送</title>
+
+<base href="http://live.nicovideo.jp/">
+
+<!---->
+<link rel="shortcut icon" href="http://live.nicovideo.jp/img/favicon.png">
+<link rel="stylesheet" type="text/css" charset="utf-8" href="css/common.css?081021">
+<link rel="stylesheet" type="text/css" href="css/recent.css?081120">
+
+
+
+<!---->
+<script type="text/javascript">
+<!--
+	
+	function keyPRESS(keyCode){
+	if( keyCode == 116 ){
+	document.write('<p style="font-size:12px; text-align:center;">キー操作制限：ブラウザの｢戻る｣ボタンでお戻りください<' + '/p>');}
+	}
+	
+	var VideoId = "";
+	var BaseUrl = "http://live.nicovideo.jp/";
+	var User = {
+		id: 95519,
+		isPremium: true,
+		isOver18: false || !!document.cookie.match(/nicoadult\s*=\s*1/)
+	};
+
+	var q = "";
+	-->
+</script>
+<script type="text/javascript" src="js/lib/prototype.js?1.5.1.1_2"></script>
+<script type="text/javascript" src="js/common.js?080530"></script>
+<script type="text/javascript" src="js/__utm.js?080530"></script>
+
+
+</head>
+
+<body class="tpl">
+
+<div id="wrapper-bg1">
+	<div id="wrapper">
+
+		<div id="header">
+			<div id="headtxt">
+								<a href="http://www.nicovideo.jp/">ニコニコ動画</a> |
+				<span class="live">生放送</span> |
+				<a href="http://ch.nicovideo.jp/">チャンネル＆コミュニティ</a> |
+				<a href="http://www.niconicommons.jp/">コモンズ</a> |
+				<a href="http://dic.nicovideo.jp/">大百科</a> |
+				<a href="http://ichiba.nicovideo.jp/">市場</a>
+							</div>
+			<div id="headtxt_link">
+			<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/recent">生放送一覧</a> |
+											<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/my">マイページ</a> |
+				<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/editstream">放送する</a> |
+				<a style="color: rgb(255, 255, 255);" href="https://secure.nicovideo.jp/secure/logout?site=nicolive">ログアウト</a>
+							</div>
+		</div><!-- #header -->
+
+		<noscript>
+			<p class="TXT12">(※)Javascriptが無効になっていると、サイト内の一部機能がご利用いただけません。</p>
+		</noscript>
+
+		
+				<div id="main_logo">
+		  <a href="http://live.nicovideo.jp/">
+			<img src="img/live/logo.gif" alt="ニコニコ生放送" title="ニコニコ生放送" class="logo"/>
+		  </a>
+		</div>
+		
+				<div id="PAGEBODY">
+		
+						<div id="index">
+				  <div id="main">
+					<div id="box01">
+					  <p><img src="img/recent/box01_top.gif"/></p>
+					  <div id="main_rec_top">
+						<div class="box01">
+						  <p class="box01_a_top">ニコニコ生放送運営が送る★運営生放送！！</p>
+						  <div class="box01_a_in">
+														<p class="left"><a href="http://live.nicovideo.jp/"><img src="thumb/484.0901081317.jpg" width="296" height="85"/></a></p>
+														<p class="right">
+							  01月09日<br/>
+							  22:00<br/>
+							  スタート<br/>
+							  <a href="http://live.nicovideo.jp/"><img src="img/recent/arrow.gif" alt="運営生放送へ" style="padding:10px 0 0 60px;"></a></p>
+						  </div>
+						  <p class="clear"><img src="img/recent/box01_a_bottom.gif"/></p>
+						</div>
+						<div id="box02">
+						  <p><a href="http://help.nicovideo.jp/live/001/"><img src="img/recent/how_to_use.gif"/></a><a href="http://live.nicovideo.jp/my"><img src="img/recent/live.gif"/></a></p>
+						</div>
+					  </div>
+					  <p><img src="img/recent/box01_bottom.gif"/></p>
+					</div>
+
+
+										
+					<!--tab -->
+					<div id="tab">
+					  <ul>
+						<li style="width: 10px;padding : 0 0; border-right:none;background-image: url('img/live/tab_a_l_bg.gif');">　</li>
+						<li style="background-image: url('img/live/tab_a_bg.gif');">
+						  						  <span style="color:#fff; font-weight:bold;">チャンネル＆コミュニティ</span>
+						  						</li>
+						<li >
+						  						  <a href="http://live.nicovideo.jp/recent?tab=ch">チャンネル</a>
+						  						</li>
+						<li >
+						  						  <a href="http://live.nicovideo.jp/recent?tab=com">コミュニティ</a>
+						  						</li>
+					  </ul>
+					</div>
+
+
+					  
+					
+					<!--/tab -->
+					<div id="search">
+					  <div class="pagelink">
+						<span>&lt; 戻る</span>						<span class="in">1</span><a href="http://live.nicovideo.jp/recent?tab=all&p=2&without_notice=true">2</a><a href="http://live.nicovideo.jp/recent?tab=all&p=3&without_notice=true">3</a><a href="http://live.nicovideo.jp/recent?tab=all&p=4&without_notice=true">4</a><a href="http://live.nicovideo.jp/recent?tab=all&p=5&without_notice=true">5</a><a href="http://live.nicovideo.jp/recent?tab=all&p=6&without_notice=true">6</a>						<a class="nextpage" href="http://live.nicovideo.jp/recent?tab=all&p=2&without_notice=true">&gt; 進む</a>					  </div>
+					  <p>
+												<h3>現在の生放送です。</h3>
+											  </p>
+					  
+					  <div id="search_result" class="clear">
+																								<div class="official_channel_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="1" src="img/channel/1.gif"/><img alt="8" src="img/channel/8.gif"/><img alt="1" src="img/channel/1.gif"/><img alt="チャンネル" src="img/channel/ch.gif"/><br/>
+									<img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71635"><img src="http://icon.nicovideo.jp/channel/co181.jpg?" width="64" height="64" class="chan_img_M"/></a></p>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 19:42放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong>アイパイ★ちゃんねる 生放送！！トナ子のア...</strong> </p>
+								  <p class="TXT12" style="width:180px;">新年明けましておめでとうございます！！
+生放送サボってもうし...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>785</b>人<b>/</b>コメ数:<b>1963</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;"><a href="http://ch.nicovideo.jp/channel/co181" class="channel">コメントアートチャンネル</a></p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																										<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71694"><img src="http://icon.nicovideo.jp/community/co9007.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:06放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71694" class="community">うどんの初めてのポケモン実況　レベル上げ...</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">まだまだいくぜー！</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>0</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">うどん：が放送するコミュニティコミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71693"><img src="http://icon.nicovideo.jp/community/co7777.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:06放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71693" class="community">２４時間ニコ生　オープニングでう</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">放送中は常に笑う！常に喋る！いろいろやります、只今1時間目
+
+...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>17</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">ちくわちゃん（新着実況レビュースレ）コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+												<div class="clear"></div>																								<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71692"><img src="http://icon.nicovideo.jp/community/co566.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:06放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71692" class="community">SEB 50～99から適当にセレクト4</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">ノンスト番号除外。本日ラスト
+今までかけてない曲中心に選ぶ予...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>2</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">ユーロビート - eurobeatコミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71691"><img src="http://icon.nicovideo.jp/community/co9107.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:06放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71691" class="community">生放送で絵を描くよ。（テスト）</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">生放送の使い方がよくわからんのでテストがてらやります。ヘタレ...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>15</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">生放送で描いてみないか。コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71690"><img src="http://icon.nicovideo.jp/community/co8921.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:05放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71690" class="community">適当にゲームを実況プレイ18　（信長の野望...</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">信長の野望って難しいんですね
+
+主の所持ゲーム一覧はコミュの...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>34</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">生放送で適当にゲームをするコミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+												<div class="clear"></div>																								<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71689"><img src="http://icon.nicovideo.jp/community/co7864.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:05放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71689" class="community">真・女神転生　デビルサマナー　鑑賞会３</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">真・女神転生デビルサマナー １～４話 鑑賞会
+※注 全25話中17話...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>16</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">女神転生シリーズ総合コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71687"><img src="http://icon.nicovideo.jp/community/co7183.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:04放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71687" class="community">目指せクラッシュ　イミソーレ</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">あけおめです＾＾
+設定５でクラッシュ狙いつつおしゃべりでも
+...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>8</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">イミソーレ動画（エビ）コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71686"><img src="http://icon.nicovideo.jp/community/co6746.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:04放送開始</strong></p>
+								   <img src="img/community/member_only.gif"/>								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71686" class="community">鯵塩萌?放送局</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">現在仲良しゲスト様襲来?中ｗ
+現在のゲスト様…コロたん、凡たん...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>9</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">鯵塩放送局コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+												<div class="clear"></div>																								<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71685"><img src="http://icon.nicovideo.jp/community/co7887.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:04放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71685" class="community">第８1回！ｇｄｇｄ生放送！</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">枠取りたいへん・・・。</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>23</b>人<b>/</b>コメ数:<b>4</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">Fateのｇｄｇｄ生放送部！コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;margin-right:10px;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71684"><img src="http://icon.nicovideo.jp/community/co8224.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:03放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71684" class="community">脱出ゲーでもするか22</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">詰むのが得意です！！
+
+あとは、全国のコナン君にまかせます。...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>22</b>人<b>/</b>コメ数:<b>15</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">【春姫】何かしよう【ゲーム】コミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+																																				<div class="community_frm" style="float:left;">
+						  <table width="304" cellspacing="4" cellpadding="0" border="0">
+							<tbody>
+							  <tr valign="top">
+								<td style="padding:4px;">
+								  <p style="margin: 2px 0pt;"><img alt="now on air" src="img/channel/now_on_air.gif"/></p>
+								  <p><a href="http://live.nicovideo.jp/watch/lv71683"><img src="http://icon.nicovideo.jp/community/co8866.jpg?" width="64" height="64" class="comm_img_M"/></a></p>
+								  <div style="width:1px; height:20px">&nbsp;</div>
+								</td>
+								<td width="100%" style="padding:4px;"><p class="TXT10"><strong>2009年01月09日 20:03放送開始</strong></p>
+								   								  <p class="TXT12" style="width:180px;"><strong><a href="http://live.nicovideo.jp/watch/lv71683" class="community">クロノトリガー低レベルクリアを目指すPart...</a></strong> </p>
+								  <p class="TXT12" style="width:180px;">シナリオ：とけよ封印　呼べよ嵐
+
+やっとヌゥ狩り終了、そして...</p>
+								  							      <p class="TXT10" style="width: 180px; margin-top: 5px;">来場者数:<b>10</b>人<b>/</b>コメ数:<b>0</b></p>
+								  <p class="TXT10" style="width:180px; margin-top:5px;">昔なつかしのゲームで縛りプレイとかしていくコミュニティ</p>
+								</td>
+							  </tr>
+							</tbody>
+						  </table>
+						</div>
+												<div class="clear"></div>																		<div class="clear"></div>
+						<div class="pagelink" style="padding-top:10px;">
+						  <span>&lt; 戻る</span>						  <span class="in">1</span><a href="http://live.nicovideo.jp/recent?tab=all&p=2&without_notice=true">2</a><a href="http://live.nicovideo.jp/recent?tab=all&p=3&without_notice=true">3</a><a href="http://live.nicovideo.jp/recent?tab=all&p=4&without_notice=true">4</a><a href="http://live.nicovideo.jp/recent?tab=all&p=5&without_notice=true">5</a><a href="http://live.nicovideo.jp/recent?tab=all&p=6&without_notice=true">6</a>						  <a class="nextpage" href="http://live.nicovideo.jp/recent?tab=all&p=2&without_notice=true">&gt; 進む</a>						</div>
+						<div style="float:left; width:900px; height:1px;"></div>
+					  </div>
+					  <div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+</div>		
+				</div>
+		
+	</div><!-- #wrapper -->
+</div><!-- #wrapper-bg1 -->
+
+<div id="footer">
+	  <!--footer -->
+  <div id="PAGEFOOTER" style="color:#CCC; text-align:center;">
+    <div style="color: rgb(204, 204, 204); text-align: center;">
+      <div style="padding: 4px; margin-bottom: 8px;">
+
+			
+        <noscript>
+        <p class="TXT12" style="color:#F30; margin-top:4px;">(※)Javascriptが無効になっていると、サイト内の一部機能がご利用いただけません。</p>
+        </noscript>
+      </div>
+      <div style="padding: 4px 4px 16px;">
+						<p style="padding-bottom:10px"><a href="http://live.nicovideo.jp/static/rule.html" target="_blank">利用規約</a></p>
+<p style="margin-bottom: 4px;" class="TXT12"> <a href="http://live.nicovideo.jp/" title="TOPへ戻る">TOPへ戻る</a> | <a href="http://help.nicovideo.jp/live/" target="_blank" title="ヘルプ">ヘルプ</a> | <a href="http://help.nicovideo.jp/live/001/" target="_blank" title="ヘルプ">使い方</a> | <a href="http://help.nicovideo.jp/live/006/" target="_blank" title="お問い合わせ">お問い合わせ</a> </p>
+        <p class="copy"><a target="_blank" href="http://niwango.jp/" style="text-decoration: none;"><img src="img/den.gif"/>&nbsp;(C) niwango, inc. All rights reserved.&nbsp;</a><img src="img/den.gif"/></p>
+      </div>
+    </div>
+  </div>
+  <!--footer -->
+</div>
+
+</body>
+
+</html>

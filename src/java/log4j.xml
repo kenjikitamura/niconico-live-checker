@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+  <!--テキストにログを出力するConsoleAppenderをSTDOUTとして定義 -->
+  <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender" >
+
+    <!-- デフォルトのログレベル -->
+    <param name="threshold" value="DEBUG"/>
+
+    <!-- ログの出力形式を指定 -->
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern"
+value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] (%F:%L) %m%n"/>
+    </layout>
+  </appender>
+
+
+  <!--決められた期間でログを別ファイルに切り替えて書き込む
+      DailyRollingFileAppenderをDAILYとして定義 -->
+  <appender name="DAILY" class="org.apache.log4j.DailyRollingFileAppender">
+
+    <!-- ログのファイル名 -->
+    <param name="file" value="checker.log" />
+
+    <!-- デフォルトのログレベル -->
+    <param name="threshold" value="DEBUG"/>
+
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+    <!-- すでにログが存在する場合、ファイルにログを追加 -->
+    <param name="append" value="true" />
+
+    <!-- ログの出力形式を指定 -->
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern"
+value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%t] (%F:%L) - %m%n" />
+    </layout>
+
+  </appender>
+
+  <category name="jp.rainbowdevil" >
+    <priority value="debug" />
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="DAILY" />
+  </category>
+
+  <!-- すべてのログをinfo 
+  <root>
+	<priority value="info" />
+    <appender-ref ref="STDOUT" />
+    <appender-ref ref="DAILY" />
+  </root>
+-->
+
+
+
+
+</log4j:configuration>

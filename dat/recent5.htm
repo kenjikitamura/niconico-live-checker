@@ -1,0 +1,450 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ja"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta name="copyright" content="(C) niwango, inc. All rights reserved.">
+
+<!---->
+ 
+
+<!---->
+<title>放送中の番組 - ニコニコ生放送</title>
+
+<base href="http://live.nicovideo.jp/">
+
+<!---->
+<link rel="shortcut icon" href="http://live.nicovideo.jp/img/favicon.png?090205">
+<link rel="stylesheet" type="text/css" charset="utf-8" href="css/common.css?090318">
+<link rel="stylesheet" type="text/css" href="css/recent.css?090402">
+
+
+
+<!---->
+<script type="text/javascript">
+<!--
+	
+	function keyPRESS(keyCode){
+	if( keyCode == 116 ){
+	document.write('<p style="font-size:12px; text-align:center;">キー操作制限：ブラウザの｢戻る｣ボタンでお戻りください<' + '/p>');}
+	}
+	
+	var VideoId = "";
+	var BaseUrl = "http://live.nicovideo.jp/";
+	var User = {
+		id: 95519,
+		isPremium: true,
+		isOver18: false || !!document.cookie.match(/nicoadult\s*=\s*1/)
+	};
+
+	var q = "";
+	-->
+</script>
+<script type="text/javascript" src="js/lib/prototype.js?1.5.1.1_2"></script>
+<script type="text/javascript" src="js/common.js?080530"></script>
+<script type="text/javascript" src="js/__utm.js?080530"></script>
+
+
+</head>
+
+<body class="tpl">
+
+<div id="wrapper-bg1">
+	<div id="wrapper">
+	<a id="PAGETOP"></a>
+		<div id="header">
+			<div id="headtxt">
+								<a href="http://www.nicovideo.jp/">ニコニコ動画</a> |
+				<span class="live">生放送</span> |
+				<a href="http://ch.nicovideo.jp/">チャンネル＆コミュニティ</a> |
+				<a href="http://www.niconicommons.jp/">コモンズ</a> |
+				<a href="http://dic.nicovideo.jp/">大百科</a> |
+				<a href="http://ichiba.nicovideo.jp/">市場</a> |
+				<a href="http://uad.nicovideo.jp/">広告</a> 
+							</div>
+			<div id="headtxt_link">
+						<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/my">マイページ</a> |
+			<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/editstream">放送する</a> |
+			<a style="color: rgb(255, 255, 255);" href="http://live.nicovideo.jp/s/help">使い方</a>
+						</div>
+		</div><!-- #header -->
+
+		<noscript>
+			<p class="TXT12">(※)Javascriptが無効になっていると、サイト内の一部機能がご利用いただけません。</p>
+		</noscript>
+
+	<!-- #header -->
+	<div id="PAGEHEADER">
+				<div id="main_logo">
+			<h1>
+				<a href="http://live.nicovideo.jp/">
+					<img src="img/nicolive/logo_niconicolive.gif?090312" alt="ニコニコ生放送" width="167" height="41" class="logo" title="ニコニコ生放送">
+				</a>
+			</h1>
+		</div>
+				<div id="logintxt">
+			<p class="txt10">
+				ログインユーザー:<br>
+				<a href="http://www.nicovideo.jp/my"><strong style="font-size: 120%;">なおき</strong></a>
+				<br>
+								<span class="premiumname">プレミアム会員</span>です
+								[ <a href="https://secure.nicovideo.jp/secure/logout?site=nicolive">ログアウト</a> ]
+			</p>
+		</div>
+					</div>
+	
+		<div id="gvmenu" class="clearfix">
+	<ul>
+    	<li><a href="http://live.nicovideo.jp/" id="btn_top" >TOP</a></li>
+    	<li><a href="http://live.nicovideo.jp/timetable" id="btn_timetable" >番組表</a></li>
+    	<li><a href="http://live.nicovideo.jp/recent?tab=common" id="btn_ctgr_01" >一般</a></li>
+    	<li><a href="http://live.nicovideo.jp/recent?tab=try" id="btn_ctgr_02" >やってみた</a></li>
+    	<li><a href="http://live.nicovideo.jp/recent?tab=live" id="btn_ctgr_03" >プレイ実況</a></li>
+    	<li><a href="http://live.nicovideo.jp/recent?tab=req" id="btn_ctgr_04" >動画紹介・リクエスト</a></li>
+    	<li><a href="http://live.nicovideo.jp/recent?tab=face" id="btn_ctgr_05" class="now">顔出し(^-^)</a></li>
+    </ul>
+	</div>
+			
+						<div id="index">
+				  <div id="main">
+					<!--subscribe -->
+					<div id="box01">
+					  <p><img src="img/recent/box_top.gif"></p>
+					  <div id="main_rec_top">
+												<h2>参加中のチャンネル・コミュニティの生放送です。</h2>
+												<p style="margin-left: 16px;">
+						  参加しているチャンネル・コミュニティで生放送が行われている場合はここに表示されます。<br>
+						  お気に入りのチャンネル・コミュニティは<a href="http://ch.nicovideo.jp/">コチラ</a>からお探しください。
+						</p>
+												
+                        <br class="clear">
+                                                <br clear="all">
+											  </div><!-- #main_rec_top -->
+                      
+					<div id="search">
+                   	  <h2>『顔出し(^-^)』 の現在の生放送です。</h2>
+					  <div class="pagelink">
+						  <span>&lt; 戻る</span>						  <span class="in">1</span>						  <span>&gt; 進む</span>					  </div>
+					  
+					  <p>
+						<form name="sort">
+						  <script>
+							<!--
+							var current_sort = 'start';
+							var category_key = 'face';
+
+							
+							function setLocation(){
+								if( isNaN(this.value) && (this.value != current_sort ) ){
+									location.href = 'recent?sort=' + this.value + '&tab=' + category_key ;
+								}
+							}
+							
+							-->
+						  </script>
+						  <select onclick="setLocation.call(this)" class="TXT12">
+							  <option value="start" selected="selected">新しい番組順</option>
+							  <option value="view" >視聴者が多い順</option>
+							  <option value="tnum" >コメントが多い順</option>
+							  <option value="level" >コミュニティレベルが高い順</option>
+							  							  <option value="grow" style="color:#ff4500" >話題のコミュニティ順( プレミアム会員限定 ! )</option>
+							  <option value="actv" style="color:#ff4500" >活発なコミュニティ順( プレミアム会員限定 ! )</option>
+							  						  </select>
+						</form>
+					  </p>
+					  
+					  <div id="search_result" class="clear">
+												
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv559036">
+			<img src="http://icon.nicovideo.jp/community/co12140.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>27</strong>人
+			<br>コメ数:<strong>19</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時38分 開始</strong>
+		</p>
+		<p class="txt10"><img src="img/community/member_only.gif?090205"/></p>		<a href="http://live.nicovideo.jp/watch/lv559036">こんばんにゃー♪　改</a><br>
+		雑談し～ましょっ☆
+
+主のすぺっく↓
+
+２２
+
+雌
+
+大３
+
+...
+		<br>
+		<br>
+		<p class="txt10">♪ チャマのニコニコ初体験 ♪コミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv559036"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv559031">
+			<img src="http://icon.nicovideo.jp/community/co8443.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>58</strong>人
+			<br>コメ数:<strong>12</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時38分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv559031">東方を普通に生実況</a><br>
+		今日もゆっくり生放送
+東方メインだけどたまにフリゲーとかやり...
+		<br>
+		<br>
+		<p class="txt10">東方厨が色々やってみるコミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">プレイ実況</span>
+	  <a href="http://live.nicovideo.jp/watch/lv559031"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv559022">
+			<img src="http://icon.nicovideo.jp/community/co19504.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>54</strong>人
+			<br>コメ数:<strong>27</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時36分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv559022">あなたといいでば　反省会</a><br>
+		就活中の大学生が、疲れたココロの癒しを目的として、雑談をベー...
+		<br>
+		<br>
+		<p class="txt10">今日から君も青森人コミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv559022"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="clear"></div>
+												<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv558905">
+			<img src="http://icon.nicovideo.jp/community/co11822.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>193</strong>人
+			<br>コメ数:<strong>253</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時18分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv558905">【今日22時半】ゲロゲロ☆チャンネル【6時間...</a><br>
+		基本うｐ主の雑談です
+ちょっとでも肌に合わないとおもったら
+...
+		<br>
+		<br>
+		<p class="txt10">カエルのゲロゲロ☆チャンネルコミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv558905"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv558880">
+			<img src="http://icon.nicovideo.jp/community/co12174.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>179</strong>人
+			<br>コメ数:<strong>205</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時14分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv558880">荒ぶる青森の眉毛(　◔ิω◔ิ)の下ネタがない...</a><br>
+		26歳の青森出身の田舎者が 
+普段出せないナマリを 
+ここで吐き...
+		<br>
+		<br>
+		<p class="txt10">都会で頑張りたい青森人(　･ิω･ิ)コミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv558880"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv558879">
+			<img src="http://icon.nicovideo.jp/community/co18253.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>137</strong>人
+			<br>コメ数:<strong>113</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時14分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv558879">【札幌】風呂桶のぬるぬるに世界を見た</a><br>
+		自宅の風呂場について大いに語る集いです
+エッチなのは良くない...
+		<br>
+		<br>
+		<p class="txt10">ゆうじの愛のカルダモンコミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv558879"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="clear"></div>
+												<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv539702">
+			<img src="http://icon.nicovideo.jp/community/co9808.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>639</strong>人
+			<br>コメ数:<strong>2359</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 21時00分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv539702">【５時間ＳＰ】和風ホラー【零～紅い蝶～】...</a><br>
+		題名どうりです…
+
+でも…怖い…だれか……たすけ…………て……………
+
+
+...
+		<br>
+		<br>
+		<p class="txt10">いじっかしく生らじ☆コミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">プレイ実況</span>
+	  <a href="http://live.nicovideo.jp/watch/lv539702"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+						
+																		<div class="uc">
+	<div class="left">
+	  <img src="img/nicolive/now_on_air.gif?090321" alt="ONAIR"><br>
+		<a href="http://live.nicovideo.jp/watch/lv537920">
+			<img src="http://icon.nicovideo.jp/community/co6695.jpg?" width="71" height="71">
+		</a>
+		<br>
+		<p class="txt10">
+			来場者数:<strong>1255</strong>人
+			<br>コメ数:<strong>2837</strong>		</p>
+	</div>
+	<div class="right">
+		<p class="txt10" style="font-size:75%">
+			<strong>2009年04月04日 20時00分 開始</strong>
+		</p>
+				<a href="http://live.nicovideo.jp/watch/lv537920">【6時間SP】コミュメンバ1500達成感謝祭</a><br>
+		ゲスト：ヲタケンさん（スカイプかな）
+
+内容
+・コミュニティ...
+		<br>
+		<br>
+		<p class="txt10">ニコニコ合唱祭コミュニティ</p>
+	</div>
+	<br class="clear" />
+	<div class="btn">
+	  <span style="font-weight: bold;color: #2a2a2a;">一般(その他)</span>
+	  <a href="http://live.nicovideo.jp/watch/lv537920"><img src="img/nicolive/btn_watch.gif" alt="視聴する" width="119" height="21"></a>
+	</div>
+</div><!-- div.uc -->
+																		<br class="clear">
+
+						
+					  </div><!-- #search_result -->
+					  
+					  <div class="pagelink" style="margin-bottom:3px;margin-top:3px;">
+						<span>&lt; 戻る</span>						<span class="in">1</span>						<span>&gt; 進む</span>					  </div>
+					  
+                    </div><!-- #search -->
+
+					<p><img src="img/recent/box_bottom.gif"></p>
+				  </div><!-- #box02 -->
+				</div><!-- #main -->
+			  </div><!-- #index -->
+
+
+		
+	</div><!-- #wrapper -->
+</div><!-- #wrapper-bg1 -->
+
+<div id="footer">
+	  <!--footer -->
+  <div id="PAGEFOOTER" style="color:#CCC; text-align:center;">
+    <div style="color: rgb(204, 204, 204); text-align: center;">
+      <div style="padding: 4px; margin-bottom: 8px;">
+
+			
+        <noscript>
+        <p class="TXT12" style="color:#F30; margin-top:4px;">(※)Javascriptが無効になっていると、サイト内の一部機能がご利用いただけません。</p>
+        </noscript>
+      </div>
+      <div style="padding: 4px 4px 16px;">
+						<p style="padding-bottom:10px"><a href="http://live.nicovideo.jp/static/rule.html" target="_blank">利用規約</a></p>
+<p style="margin-bottom: 4px;" class="TXT12"> <a href="http://live.nicovideo.jp/" title="TOPへ戻る">TOPへ戻る</a> | <a href="http://help.nicovideo.jp/live/" target="_blank" title="ヘルプ">ヘルプ</a> | <a href="http://live.nicovideo.jp/s/help" title="使い方">使い方</a> | <a href="http://help.nicovideo.jp/live/006/" target="_blank" title="お問い合わせ">お問い合わせ</a> </p>
+        <p class="copy"><a target="_blank" href="http://niwango.jp/" style="text-decoration: none;"><img src="img/den.gif?090205"/>&nbsp;(C) niwango, inc. All rights reserved.&nbsp;</a><img src="img/den.gif?090205"/></p>
+      </div>
+    </div>
+  </div>
+  <!--footer -->
+</div>
+
+</body>
+
+</html>
