@@ -4,6 +4,11 @@ import jp.rainbowdevil.niconicolivechecker.ui.NiconicoWindow;
 
 import org.eclipse.jface.action.Action;
 
+/**
+ * 終了Action
+ * @author kkitamu
+ *
+ */
 public class ExitAction extends Action {
 	
 	private NiconicoWindow window;

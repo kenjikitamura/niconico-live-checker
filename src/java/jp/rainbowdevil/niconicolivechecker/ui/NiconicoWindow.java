@@ -17,6 +17,7 @@ import jp.rainbowdevil.niconicolivechecker.data.FavoriteChannel;
 import jp.rainbowdevil.niconicolivechecker.data.LiveChannel;
 import jp.rainbowdevil.niconicolivechecker.data.StateChangeListener;
 import jp.rainbowdevil.niconicolivechecker.ui.action.ExitAction;
+import jp.rainbowdevil.niconicolivechecker.ui.action.OpenPreferenceAction;
 import jp.rainbowdevil.niconicolivechecker.ui.action.OutputSoundAction;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -30,6 +31,7 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.ShellAdapter;
@@ -79,9 +81,9 @@ public class NiconicoWindow extends ApplicationWindow{
 	
 	public NiconicoWindow( NiconicoLiveChecker checker ) {
 		super(null);
+		this.checker = checker;
 		addMenuBar();
 		addStatusLine();
-		this.checker = checker;
 		notifiedUrlSet = new HashMap<String,String>();
 	}
 	
@@ -130,7 +132,8 @@ public class NiconicoWindow extends ApplicationWindow{
 		});
 		
 		MenuManager configMenu = new MenuManager("設定");
-		configMenu.add( new OutputSoundAction(checker));
+		configMenu.add( new OutputSoundAction(this));
+		configMenu.add( new OpenPreferenceAction(this));
 		menuManager.add(configMenu);
 		
 		return menuManager;
@@ -219,7 +222,7 @@ public class NiconicoWindow extends ApplicationWindow{
 //						}
 						hit = true;
 						final String msg = channel.getTitle()+"が"+channel.getStartDateString()+"から放送開始しています。";
-						showTooltip(msg);
+						showTooltip(msg,channel);
 						setStatesOtherThread(msg);
 					}else{
 						log.debug("hitしたが通知済み "+channel.getTitle()+" "+channel.getCommunityTitle());
@@ -253,16 +256,23 @@ public class NiconicoWindow extends ApplicationWindow{
 	 * Vistaでは表示されない？
 	 * @param msg
 	 */
-	private void showTooltip( final String msg ){
+	private void showTooltip( final String msg , final LiveChannel channel){
 		getShell().getDisplay().asyncExec(new Runnable(){
 			@Override
 			public void run() {
 				ToolTip tip = new ToolTip(getShell(), SWT.BALLOON | SWT.ICON_INFORMATION);
+				tip.addSelectionListener(new SelectionAdapter(){
+					@Override
+					public void widgetSelected(SelectionEvent arg0) {
+						ChannelListComposite.executeBrowser(channel.getUrl());
+					}
+				});
 				tip.setText(NiconicoLiveChecker.APP_NAME);
 				tip.setMessage(msg);
 				tip.setAutoHide(true);
 				trayItem.setToolTip(tip);
 				tip.setVisible(true);
+				
 			}
 		});
 	}
@@ -349,5 +359,14 @@ public class NiconicoWindow extends ApplicationWindow{
 			}
 			
 		});
+		
+		//------------------------------------------------------
+		// 起動時に非表示の設定
+		if( Config.get().getBoolean(Config.TASKTRAY_START) ){
+			log.debug("非表示で開始する");
+			shell.setVisible(false);
+			shell.setMinimized(true);
+		}
+		//------------------------------------------------------
 	}
 }

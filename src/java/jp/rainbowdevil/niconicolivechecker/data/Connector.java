@@ -12,17 +12,34 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
 
-
+/**
+ * ニコニコ動画ユーザ生放送のサイトへ接続し、LiveChannelインスタンスのリストを取得するクラス
+ * @author kkitamu
+ *
+ */
 public class Connector {
+	
+	/** 接続先URL */
 	private String URL = "http://live.nicovideo.jp/recent?tab=<TAG>&p=<PAGE>&without_notice=true&sort=start";
 	
+	/** 取得タグ */
 	private String[] tags = {"common","try","live","req","face","r18"};
+	
+	/** 取得タグラベル */
 	private String[] tagName = {"一般","やってみた","実況","リクエスト","顔出し","R18"};
 	
 	/** Logインスタンスを取得 */
 	protected static org.apache.log4j.Logger log = org.apache.log4j.Logger
 			.getLogger(Connector.class);
 	
+	/**
+	 * 指定のURLに接続し、結果を取得する
+	 * 文字コードはUTF-8固定
+	 * @param url
+	 * @return
+	 * @throws HttpException
+	 * @throws IOException
+	 */
 	public String getString( String url ) throws HttpException, IOException{
 	    HttpClient client = new HttpClient();
 	    GetMethod method = new GetMethod(url);
@@ -40,6 +57,14 @@ public class Connector {
 	    }  	
 	}
 	
+	/**
+	 * すべての放送中チャンネルリストを取得する
+	 * 
+	 * @param listener 取得中の状態を通知するためのリスナ nullでも可
+	 * @return 放送中のLiveChannelのリスト
+	 * @throws HttpException
+	 * @throws IOException
+	 */
 	public List<LiveChannel> getAllChannelList( StateChangeListener listener ) throws HttpException, IOException{
 		List<LiveChannel> allChannelList = new ArrayList<LiveChannel>();
 		NiconicoParser parser = new NiconicoParser();
@@ -82,11 +107,15 @@ public class Connector {
 				}
 				list.addAll(pageChannels);
 				
+				//----------------------------------------------------------------
 				// 通知
 				String msg = "更新中 (カテゴリ"+tagName[i]+" "+page+"ページ目読み込み完了)";
 				ChannelListUpdateEvent event = new ChannelListUpdateEvent();
 				event.setMsg(msg);
-				listener.handleStateChange(event);
+				if( listener != null ){
+					listener.handleStateChange(event);
+				}
+				//----------------------------------------------------------------
 				
 				page++;
 			}

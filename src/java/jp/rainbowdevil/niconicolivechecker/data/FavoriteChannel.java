@@ -2,6 +2,11 @@ package jp.rainbowdevil.niconicolivechecker.data;
 
 import java.io.Serializable;
 
+/**
+ * お気に入りクラス
+ * @author kkitamu
+ *
+ */
 public class FavoriteChannel implements Serializable{
 	
 	private String title = "";
