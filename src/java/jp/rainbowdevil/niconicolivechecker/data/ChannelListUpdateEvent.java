@@ -2,6 +2,7 @@ package jp.rainbowdevil.niconicolivechecker.data;
 
 /**
  * チャンネルリストの更新時のイベント
+ * 
  * @author kkitamu
  *
  */
