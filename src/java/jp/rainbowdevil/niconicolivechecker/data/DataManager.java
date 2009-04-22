@@ -9,11 +9,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-/**
- * お気に入りデータの保存読み込み
- * @author kkitamu
- *
- */
 public class DataManager {
 	
 	public static final String DEFAULT_FILENAME = "favorite.dat";

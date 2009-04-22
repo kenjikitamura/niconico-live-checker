@@ -7,11 +7,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
-/**
- * 放送リストのHTMLをパースし、LiveChannelインスタンスを生成するパーサ
- * @author kkitamu
- *
- */
 public class NiconicoParser {
 	
 	private Pattern commentSizePattern = Pattern.compile("コメ数:<strong>(.*)</strong>");
@@ -136,11 +131,6 @@ public class NiconicoParser {
 		return list;
 	}
 	
-	/**
-	 * 各種実態参照やタグを変換
-	 * @param line
-	 * @return
-	 */
 	private String convert( String line ){
 		if( line == null ){
 			log.debug("line=null.");

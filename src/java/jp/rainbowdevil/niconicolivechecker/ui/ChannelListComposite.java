@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import jp.rainbowdevil.niconicolivechecker.NiconicoLiveChecker;
-import jp.rainbowdevil.niconicolivechecker.config.Config;
 import jp.rainbowdevil.niconicolivechecker.data.FavoriteChannel;
 import jp.rainbowdevil.niconicolivechecker.data.LiveChannel;
 import jp.rainbowdevil.niconicolivechecker.ui.provider.ChannelListContentProvider;
@@ -46,11 +45,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-/**
- * チャンネルリストGUI部分
- * @author kkitamu
- *
- */
 public class ChannelListComposite extends Composite {
 	
 	private NiconicoLiveChecker checker;
@@ -225,11 +219,11 @@ public class ChannelListComposite extends Composite {
 			@Override
 			public void run() {
 				FavoriteChannel favoriteChannel = new FavoriteChannel();
-				favoriteChannel.setKeyword(channel.getCommunityTitle());
+				favoriteChannel.setTitle(channel.getCommunityTitle());
 				
 				boolean exist = false;
 				for( FavoriteChannel favorite :checker.getFavoriteChannelList()){
-					if( channel.getTitle().equals(favorite.getKeyword()) || channel.getCommunityTitle().equals(favorite.getKeyword())){
+					if( channel.getTitle().equals(favorite.getTitle()) || channel.getCommunityTitle().equals(favorite.getTitle())){
 						exist = true;
 					}
 				}
@@ -245,24 +239,8 @@ public class ChannelListComposite extends Composite {
 	
 	public static void executeBrowser(String url) {
 		log.debug("URLを開く "+url);
-		
-		String browserPath = Config.get().getString(Config.BROWSER_PATH);
-		if( browserPath != null ){
-			try {
-				Runtime.getRuntime().exec( browserPath +" " + url);
-				return;
-			} catch (IOException e) {
-				log.error("設定されたブラウザ("+browserPath+")での表示に失敗しました。");
-				log.debug("デフォルトのブラウザでの表示を行います。");
-			}
-		}
-		
 	    // 拡張子が"html"のアプリケーションを開く。
 	    Program program = Program.findProgram("html");
-	    if( program == null ){
-	    	program = Program.findProgram("htm");
-	    }
-	    
 	    if (program != null) {
 	        program.execute(url);
 	    } else {
@@ -307,28 +285,37 @@ public class ChannelListComposite extends Composite {
 
 		@Override
 		public Image getColumnImage(Object arg0, int arg1) {
+			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public void addListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void dispose() {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public boolean isLabelProperty(Object arg0, String arg1) {
+			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void removeListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public Color getBackground(Object arg0, int arg1) {
+			// TODO Auto-generated method stub
 			return null;
 		}
 

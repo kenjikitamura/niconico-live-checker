@@ -95,10 +95,10 @@ public class FavoriteComposite extends Composite {
 	 */
 	private MenuManager getContextMenu( final FavoriteChannel favorite ){
 		MenuManager menu = new MenuManager();
-		menu.add(new Action("キーワード "+favorite.getKeyword()+" を削除"){
+		menu.add(new Action("キーワード "+favorite.getTitle()+" を削除"){
 			@Override
 			public void run() {
-				log.debug("お気に入りの削除 "+favorite.getKeyword());
+				log.debug("お気に入りの削除 "+favorite.getTitle());
 				checker.getFavoriteChannelList().remove(favorite);
 				checker.getWindow().favoriteListRefresh();
 			}
@@ -122,31 +122,40 @@ private class TableLabelProvider implements ITableLabelProvider{
 			FavoriteChannel channel = (FavoriteChannel)obj;
 			switch( index ){
 			case 0:
-				return channel.getKeyword();
+				return channel.getTitle();
 			}
 			return null;
 		}
 
 		@Override
 		public Image getColumnImage(Object arg0, int arg1) {
+			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public void addListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public void dispose() {
+			// TODO Auto-generated method stub
+			
 		}
 
 		@Override
 		public boolean isLabelProperty(Object arg0, String arg1) {
+			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public void removeListener(ILabelProviderListener arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
+
 }

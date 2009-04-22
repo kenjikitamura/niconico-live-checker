@@ -21,18 +21,15 @@ public class LiveChannel {
 	private int commentSize;
 	private boolean isNotified;
 	private boolean isFavorite;
-
-	/** 日付フォーマット 
-	 *  マルチスレッドには対応していないので、マルチスレッドで番組リストの取得をするよう変更する場合は注意 */
+	
 	static private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH時mm分");
+
+	
 	
 	/** Logインスタンスを取得 */
 	protected static org.apache.log4j.Logger log = org.apache.log4j.Logger
 			.getLogger(LiveChannel.class);
 	
-	/**
-	 * 放送開始日のパース
-	 */
 	private void parseStartDateString(){
 		log.debug("開始時間="+startDateString);
 		try {
